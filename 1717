@@ -1,0 +1,39 @@
+#include <iostream>
+
+using namespace std;
+
+int parent[1000001];
+
+int Find(int x){
+    if(x==parent[x]) return x;
+    else return parent[x] = Find(parent[x]);
+}
+
+void Union(int x,int y){
+    x = Find(x);
+    y = Find(y);
+    if(x!=y) parent[y] = x;
+}
+
+int main()
+{
+    int n,m,t,a,b;
+
+    scanf("%d %d",&n,&m);
+    for(int i=1;i<=n;i++){
+        parent[i] = i;
+    }
+
+    for(int i=1;i<=m;i++){
+        scanf("%d %d %d",&t,&a,&b);
+
+        if(t==0){
+            Union(a,b);
+        }
+        else{
+            printf("%s\n",Find(a)==Find(b)?"YES":"NO");
+        }
+    }
+
+    return 0;
+}
