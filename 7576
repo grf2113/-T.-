@@ -1,0 +1,63 @@
+#include<iostream>
+#include<queue>
+using namespace std;
+
+queue<pair<int,int>> q;
+
+int dx[4] = {0,0,1,-1};
+int dy[4] = {1,-1,0,0};
+int m[1001][1001];
+int a,b;
+
+int able(int x,int y){
+    if(x>=1 && x<=a && y>=1 && y<=b) return 1;
+    else return 0;
+}
+
+int main(){
+    int k,cnt=0;
+
+    cin>>b>>a;
+
+    for(int i=1;i<=a;i++){
+        for(int j=1;j<=b;j++){
+            cin>>k;
+            m[i][j] = k;
+            if(k==0) cnt++;
+            if(k==1) q.push({i,j});
+        }
+    }
+
+    int day = 0;
+
+    while(!q.empty()){
+        if(cnt==0) break;
+        int s = q.size();
+        day++;
+
+        for(int j=1;j<=s;j++){
+            pair<int,int> t = q.front();
+            q.pop();
+
+            int x = t.first;
+            int y = t.second;
+
+            for(int i=0;i<4;i++){
+                int xx = x+dx[i];
+                int yy = y+dy[i];
+
+                if(m[xx][yy]==0 && able(xx,yy)){
+                    m[xx][yy]=1;
+                    q.push({xx,yy});
+                    cnt--;
+                }
+            }
+        }
+    }
+
+
+    if(cnt==0) cout<<day;
+    else cout<<-1;
+    return 0;
+}
+
