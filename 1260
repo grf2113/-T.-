@@ -1,0 +1,67 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include<algorithm>
+using namespace std;
+
+vector<int> v[3000];
+int ch1[3000], ch2[3000];
+
+
+void dfs(int x){
+
+    cout<<x<<' ';
+
+    for(int i=0;i<v[x].size();i++){
+        int next = v[x][i];
+        if(ch1[next]==0){
+            ch1[next] = 1;
+            dfs(next);
+        }
+    }
+}
+
+void bfs(int x){
+
+    queue<int> q;
+    q.push(x);
+    ch2[x] = 1;
+
+    while(!q.empty()){
+        int t = q.front();
+        cout<<t<<' ';
+        q.pop();
+
+        for(int i=0;i<v[t].size();i++){
+            int next = v[t][i];
+            if(ch2[next]==0){
+                ch2[next]=1;
+                q.push(next);
+            }
+        }
+    }
+}
+
+
+int main(){
+    int n,m,s,i,a,b;
+
+    cin>>n>>m>>s;
+
+    for(int i=1;i<=m;i++){
+        cin>>a>>b;
+        v[a].push_back(b);
+        v[b].push_back(a);
+    }
+
+    for(int i=1;i<=n;i++){
+        sort(v[i].begin(),v[i].end());
+    }
+
+    ch1[s] = 1;
+    dfs(s);
+    cout<<endl;
+    bfs(s);
+
+    return 0;
+}
