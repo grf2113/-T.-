@@ -1,0 +1,67 @@
+#include <iostream>
+#include<algorithm>
+
+using namespace std;
+
+int dx[4] = {0,0,1,-1};
+int dy[4] = {1,-1,0,0};
+
+int ch[30][30],m[30][30];
+char mc[30][30];
+
+int a[1000];
+int c=0;
+
+int dfs(int x,int y){
+    c++;
+    for(int i=0;i<4;i++){
+        int xx = x+dx[i];
+        int yy = y+dy[i];
+
+        if(ch[xx][yy]==0 && m[xx][yy] == 1){
+            ch[xx][yy] = 1;
+            dfs(xx,yy);
+        }
+    }
+    return 1;
+}
+
+
+int main()
+{
+    int n;
+
+    cin>>n;
+
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            cin>>mc[i][j];
+            m[i][j] = mc[i][j]-'0';
+        }
+    }
+
+    int z=0,cnt=0;
+
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            if(m[i][j]==1 && ch[i][j]==0){
+                ch[i][j] = 1;
+                c = 0;
+                dfs(i,j);
+                a[++z] = c;
+                cnt++;
+            }
+        }
+    }
+
+
+    cout<<cnt<<endl;
+
+    sort(a+1,a+z+1);
+
+    for(int i=1;i<=z;i++){
+        cout<<a[i]<<endl;
+    }
+
+    return 0;
+}
