@@ -1,0 +1,26 @@
+#include <iostream>
+#include <queue>
+#include <vector>
+
+using namespace std;
+
+
+int main(){
+    priority_queue<int> q;
+    int n;
+
+    scanf("%d",&n);
+
+    for(int i=1;i<=n;i++){
+        int x;
+        scanf("%d",&x);
+        if(x==0){
+            printf("%d\n",q.empty()? 0:-q.top());
+            if(!q.empty()) q.pop();
+        }
+
+        else q.push(-x);
+    }
+
+    return 0;
+}
