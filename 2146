@@ -1,0 +1,108 @@
+#include<iostream>
+#include<queue>
+
+using namespace std;
+
+int n;
+int m[200][200], ch[200][200];
+int dx[4] = {0,0,1,-1}, dy[4] = {1,-1,0,0};
+
+bool isValid(int x,int y){
+    if(x>=1 && x<=n && y>=1 && y<=n) return true;
+    else return false;
+}
+
+void color(int x,int y,int c){
+
+    m[x][y] = c;
+    ch[x][y] = 1;
+
+    for(int i=0;i<4;i++){
+        int xx = x + dx[i];
+        int yy = y + dy[i];
+        if(ch[xx][yy]==0 && m[xx][yy]==1 && isValid(xx,yy)) color(xx,yy,c);
+    }
+}
+
+void ch_reset(){
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            ch[i][j] = 0;
+        }
+    }
+}
+
+int bfs(int num){
+
+    queue<pair<int,int>> q;
+
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            if(m[i][j] == num){
+                q.push({i,j});
+                ch[i][j] = 1;
+            }
+        }
+    }
+
+    int dis = 0;
+    bool flag = false;
+
+    while(!q.empty()){
+
+        int s = q.size();
+
+        for(int z = 1; z<=s;z++){
+            pair<int,int> t = q.front();
+            q.pop();
+
+            int x = t.first;
+            int y = t.second;
+
+            for(int i=0;i<4;i++){
+                int xx = x + dx[i];
+                int yy = y + dy[i];
+
+                if(isValid(xx,yy) && ch[xx][yy]==0){
+                    if(m[xx][yy]!=0) return dis;
+
+                    ch[xx][yy] = 1;199
+                    q.push({xx,yy});
+                }
+            }
+        }
+
+        dis++;
+    }
+}
+
+
+int main(){
+
+    int cnt = 0;
+
+    cin>>n;
+
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            cin>>m[i][j];
+        }
+    }
+
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            if(m[i][j]==1 && ch[i][j]==0) color(i,j,++cnt);
+        }
+    }
+
+    int res = 10000;
+
+    for(int i=1;i<cnt;i++){
+        ch_reset();
+        res = min(res,bfs(i));
+    }
+
+    cout<<res;
+
+    return 0;
+}
