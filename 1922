@@ -1,0 +1,51 @@
+#include <iostream>
+#include <queue>
+#include <vector>
+using namespace std;
+
+vector<pair<int,int>> v[10001];
+bool check[10001];
+
+
+void prim(){
+    check[1] = true;
+
+    priority_queue<pair<int,int>> q;
+
+    for(auto p:v[1])
+        q.push({-p.second,p.first});
+
+    int sum = 0;
+
+    while(!q.empty()){
+        pair<int,int> t = q.top();
+        q.pop();
+        if(check[t.second]==true) continue;
+
+        sum += -t.first;
+        check[t.second] = true;
+        for(auto p:v[t.second])
+            q.push({-p.second,p.first});
+    }
+
+    printf("%d",sum);
+    return;
+}
+
+
+int main()
+{
+    int n,m,a,b,c;
+
+    scanf("%d",&n);
+    scanf("%d",&m);
+
+    for(int i=1;i<=m;i++){
+        scanf("%d %d %d",&a,&b,&c);
+        v[a].push_back({b,c});
+        v[b].push_back({a,c});
+    }
+
+    prim();
+    return 0;
+}
