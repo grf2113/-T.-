@@ -1,0 +1,63 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#define MAX_SIZE 1001
+#define INF 2147000000
+using namespace std;
+
+vector<pair<int,int>> v[MAX_SIZE];
+vector<int> path;
+
+int dis[MAX_SIZE],before[MAX_SIZE];
+int main()
+{
+    int n,m,a,b,c,s,e;
+
+    scanf("%d %d",&n,&m);
+
+    for(int i=1;i<=n;i++){
+        dis[i] = INF;
+    }
+
+    for(int i=1;i<=m;i++){
+        scanf("%d %d %d",&a,&b,&c);
+        v[a].push_back({b,c});
+    }
+
+    scanf("%d %d",&s,&e);
+
+    priority_queue<pair<int,int>> pq;
+    dis[s] = 0;
+    pq.push({0,s});
+
+    while(!pq.empty()){
+        int cost = -pq.top().first;
+        int current = pq.top().second;
+        pq.pop();
+
+        for(int i=0;i<v[current].size();i++){
+            int next = v[current][i].first;
+            int next_cost = dis[current] + v[current][i].second;
+
+            if(next_cost < dis[next]){
+                dis[next] = next_cost;
+                pq.push({-dis[next],next});
+                before[next] = current;
+            }
+        }
+    }
+
+    printf("%d\n",dis[e]);
+
+    int p=e,z=0;
+
+    while(p){
+        path.push_back(p);
+        p = before[p];
+    }
+
+    printf("%d\n",path.size());
+    for(int i=path.size()-1;i>=0;i--) printf("%d ",path[i]);
+
+    return 0;
+}
